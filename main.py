@@ -4,15 +4,15 @@ class gene:
 	def __init__(self, nom_gene, id_gene, position_deb, position_fin, longeur) :
 		self.nom_gene = nom_gene
 		self.id_gene = id_gene
-		self.position_deb = position_deb
-		self.position_fin = position_fin
-		self.longeur = longeur
+		self.position_deb = int(position_deb)
+		self.position_fin = int(position_fin)
+		self.longeur = int(longeur)
 
 
 		self.transcript = 0
 
 	def __repr__(self) :
-		return "id = %s, nom = %s, longeur = %d, transcript = %d"%(self.id_gene, self.nom_gene, self.longeur, self.transcript)
+		return "id = %s, nom = %s, debut = %d, fin = %d, longeur = %d, transcript = %d"%(self.id_gene, self.nom_gene, self.position_deb, self.position_fin, self.longeur, self.transcript)
 
 
 
