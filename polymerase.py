@@ -41,11 +41,11 @@ for i in xrange(20):
 
 	# a.initiation(range(10))
 
-
+'''
 a = np.random.randint(10, size = 10)
 
 b = np.where(a == 0)[0]
 
 
 print a 
-print b
+print b'''
