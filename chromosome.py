@@ -13,7 +13,7 @@ class chromosome:
 
 		self.sigma = np.array([10 for i in xrange(longeur)])
 
-		self.
+		
 	
 
 	## le f(sigma) dans l'equation de taux d'init
@@ -29,28 +29,29 @@ class chromosome:
 
 	def etape_init(self,sigma): 
  
-    self.taux_init = [] ##vecteur des taux pour chaque gene 
-    self.prob_init = [] ##vecteur des prob pour chaque gene 
-    self.sigma=sigma 
-    self.indice = []    ## vecteur 0 non transcrit, 1 oui 
-    self.tab=[] #tester print la longeur 
-    for i,x in enumerate(self.chrome): ##i indice gene 
-      taux_i = self.taux_basal[i]*self.fonction_sigma(self.sigma[i]) 
-      self.taux_init.append(taux_i) 
-      self.tab.append(x.p()) #appelle la longeur 
-    for i,x in enumerate(self.chrome): 
-      prob_i = self.taux_init[i]/(sum(self.taux_init)) 
-      prob = randint(0,1) 
-      if prob_i<prob: 
-        indice_i=0 
-      else: indice_i=1 
-      self.prob_init.append(prob_i) 
-      self.indice.append(indice_i) 
-    return(self.prob_init,self.indice,self.tab) 
- 
-  def simulation(self,sigma): 
-    self.sigma=sigma 
-    print self.etape_init(self.sigma) 
+		self.taux_init = [] ##vecteur des taux pour chaque gene 
+		self.prob_init = [] ##vecteur des prob pour chaque gene 
+		self.sigma=sigma 
+		self.indice = []    ## vecteur 0 non transcrit, 1 oui 
+		self.tab=[] #tester print la longeur 
+		for i,x in enumerate(self.chrome): ##i indice gene 
+			taux_i = self.taux_basal[i]*self.fonction_sigma(self.sigma[i]) 
+			self.taux_init.append(taux_i) 
+			self.tab.append(x.p()) #appelle la longeur 
+		for i,x in enumerate(self.chrome): 
+			prob_i = self.taux_init[i]/(sum(self.taux_init)) 
+			prob = randint(0,1) 
+			if prob_i<prob: 
+				indice_i=0 
+			else: indice_i=1 
+			self.prob_init.append(prob_i) 
+			self.indice.append(indice_i) 
+		return(self.prob_init,self.indice,self.tab) 
+	 
+
+	def simulation(self,sigma): 
+		self.sigma=sigma 
+		print self.etape_init(self.sigma) 
 
 
 '''

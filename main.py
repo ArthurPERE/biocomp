@@ -4,6 +4,8 @@ import gene
 import chromosome as chro
 import numpy as np
 
+# nombre de polymerases
+nb_poly = 2
 
 # vecteur de gene
 genes = []
@@ -65,8 +67,13 @@ del(lines)
 del(line)
 
 
-# donner la 
-chromo.genes = np.array(genes)
 
-print chromo.genes
-print chromo.longeur
+genes = np.array(genes)
+
+
+# vecteur temps de fixation de la polymerase
+time = np.array([0 for i in xrange(nb_poly)])
+
+# vecteur polymerase
+polym = np.array([poly.Polymerase() for i in xrange(nb_poly)])
+

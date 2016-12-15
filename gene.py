@@ -12,6 +12,10 @@ class gene:
 
 		self.transcript = 0
 
+	def long(self):
+		return self.longeur
+
+
 	def __repr__(self) :
 		return "id = %s, longeur = %d, transcript = %d"%(self.id, self.longeur, self.transcript)
 
