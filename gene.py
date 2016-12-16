@@ -7,6 +7,12 @@ class gene:
 		self.position_fin = int(position_fin)
 		self.longeur = abs(self.position_fin - (self.position_deb)) + 1
 
+		if ( self.position_deb > self.position_fin ):
+			self.sens = -1
+		else :
+			self.sens = 1
+
+
 		self.init = 1
 		self.term = 1
 

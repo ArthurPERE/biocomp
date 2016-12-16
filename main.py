@@ -68,7 +68,12 @@ del(line)
 
 
 
-genes = np.array(genes)
+chromo.genes = np.array(genes)
+chromo.create_vector()
+
+
+print chromo.calcK()
+
 
 
 # vecteur temps de fixation de la polymerase
@@ -76,4 +81,6 @@ time = np.array([0 for i in xrange(nb_poly)])
 
 # vecteur polymerase
 polym = np.array([poly.Polymerase() for i in xrange(nb_poly)])
+
+
 

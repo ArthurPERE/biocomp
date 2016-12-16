@@ -1,5 +1,6 @@
 import gene as g
 import numpy as np
+from math import *
 
 class chromosome:
 	# longeur du genome
@@ -9,24 +10,42 @@ class chromosome:
 		self.id = id_c
 
 		# le tableau de genes
-		self.genes = False
+		self.genes = []
 
-		self.sigma = np.array([10 for i in xrange(longeur)])
+		self.sigma = np.array([-0.4 for i in xrange(longeur)])
 
 		
 	
+	def create_vector(self):
+		self.promo = []
+		self.taux_init = []
+
+		for i in self.genes:
+			self.promo.append(i.position_deb)
+			self.taux_init.append(i.init)
+
 
 	## le f(sigma) dans l'equation de taux d'init
 	def fonction_sigma(self,sigma):
-		sigma_t = 10
-		epsilon = 0.1
-		g_sigma = m/(1+exp(sigma-sigma_t)/epsilon)
-		prob_sigma = exp(g_sigma)
+
+		g_sigma = 1/(1+np.exp(sigma-(-0.4))/0.01)
+		prob_sigma = np.exp(g_sigma)
 
 		return prob_sigma
 
 
 
+	def calcK(self):
+		f_0 = self.sigma[self.promo]
+		print f_0
+
+		K = self.fonction_sigma(f_0)
+		K *= self.taux_init
+		K /= sum(K)
+		return K
+
+
+	'''
 	def etape_init(self,sigma): 
  
 		self.taux_init = [] ##vecteur des taux pour chaque gene 
@@ -47,7 +66,7 @@ class chromosome:
 			self.prob_init.append(prob_i) 
 			self.indice.append(indice_i) 
 		return(self.prob_init,self.indice,self.tab) 
-	 
+	'''
 
 	def simulation(self,sigma): 
 		self.sigma=sigma 
