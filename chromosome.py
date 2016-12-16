@@ -1,5 +1,6 @@
 import gene as g
 import numpy as np
+import polymerase
 from math import *
 
 class chromosome:
@@ -11,11 +12,13 @@ class chromosome:
 
 		# le tableau de genes
 		self.genes = []
+		self.polymerases = []
 
 		self.sigma = np.array([-0.4 for i in xrange(longeur)])
 
 		
-	
+	# fonction pour creer les vecteurs contenant les positions des promoteurs
+	# et du taux initalisation
 	def create_vector(self):
 		self.promo = []
 		self.taux_init = []
@@ -34,39 +37,35 @@ class chromosome:
 		return prob_sigma
 
 
-
+	# Fonction pour calculer K
 	def calcK(self):
 		f_0 = self.sigma[self.promo]
-		print f_0
 
 		K = self.fonction_sigma(f_0)
 		K *= self.taux_init
 		K /= sum(K)
+
 		return K
 
 
-	'''
-	def etape_init(self,sigma): 
- 
-		self.taux_init = [] ##vecteur des taux pour chaque gene 
-		self.prob_init = [] ##vecteur des prob pour chaque gene 
-		self.sigma=sigma 
-		self.indice = []    ## vecteur 0 non transcrit, 1 oui 
-		self.tab=[] #tester print la longeur 
-		for i,x in enumerate(self.chrome): ##i indice gene 
-			taux_i = self.taux_basal[i]*self.fonction_sigma(self.sigma[i]) 
-			self.taux_init.append(taux_i) 
-			self.tab.append(x.p()) #appelle la longeur 
-		for i,x in enumerate(self.chrome): 
-			prob_i = self.taux_init[i]/(sum(self.taux_init)) 
-			prob = randint(0,1) 
-			if prob_i<prob: 
-				indice_i=0 
-			else: indice_i=1 
-			self.prob_init.append(prob_i) 
-			self.indice.append(indice_i) 
-		return(self.prob_init,self.indice,self.tab) 
-	'''
+	# fonction initialisation
+	# indice_t : indices negatif de t
+	def initialisation(self, indice_t):
+
+		K = self.calcK()
+
+		t = [0 for i in xrange(len(indice_t))]
+		# gene : parmie les elements des genes, on choisit le nombre de polymerases inactive
+		# avec differentes probabilite
+		genes = np.random.choice(self.genes, len(indice_t), replace=False, p=K)
+
+		
+
+
+	# 
+	def update_initial(self, indice_t, P_inac, genes):
+
+
 
 	def simulation(self,sigma): 
 		self.sigma=sigma 

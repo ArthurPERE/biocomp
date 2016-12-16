@@ -12,6 +12,8 @@ class Polymerase:
 
 		self.x = 0
 
+		self.genes = 0
+
 	
 
 	# prob_genes = listes de toutes les probabilite initiation pour chaque genes

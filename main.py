@@ -69,6 +69,8 @@ del(line)
 
 
 chromo.genes = np.array(genes)
+chromo.polymerases = np.array([poly.Polymerase() for i in xrange(nb_poly)])
+
 chromo.create_vector()
 
 
@@ -84,3 +86,4 @@ polym = np.array([poly.Polymerase() for i in xrange(nb_poly)])
 
 
 
+chromo.initialisation(np.where(time <= 0), time)
