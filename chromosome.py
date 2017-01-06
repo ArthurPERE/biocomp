@@ -1,20 +1,21 @@
 import gene as g
 import numpy as np
-import polymerase
 from math import *
 from eqsygma import *
 
+from donnee import *
+
 class chromosome:
 	# longeur du genome
-	def __init__(self, longeur, nom, id_c):
-		self.longeur = longeur
+	def __init__(self, longueur, nom, id_c):
+		self.longueur = longueur
 		self.nom = nom
 		self.id = id_c
 
 		# le tableau de genes
 		self.genes = []
 
-		self.sigma = -0.4 * np.ones(longeur)
+		self.sigma = -0.4 * np.ones(longueur)
 
 		
 	# fonction pour creer les vecteurs contenant les positions des promoteurs
@@ -26,14 +27,13 @@ class chromosome:
 		self.promo = np.array([ i.position_deb for i in self.genes ]).astype(int)
 		self.taux_init = np.array([ i.init for i in self.genes ])
 		self.taux_term = np.array([ i.term for i in self.genes ])
-		self.longeur = np.array([ i.longeur for i in self.genes ]).astype(int)
+		self.longueur_gene = np.array([ i.longueur for i in self.genes ]).astype(int)
 		self.sens = np.array([ i.sens for i in self.genes ]).astype(int)
 
 		self.pos_poly = - np.ones(nb_poly).astype(int)
-		self.vitesse_poly = np.random.randint(25,50, size = nb_poly)
 		self.gene_liee_poly = - np.ones(nb_poly).astype(int)
 
-
+		del self.genes
 
 
 
@@ -69,15 +69,18 @@ class chromosome:
 
 		self.pos_poly[indice_t] = self.promo[id_genes]
 		self.gene_liee_poly[indice_t] = id_genes
+
 		
-		return self.longeur[id_genes] * self.vitesse_poly[indice_t] / 1000
+		return (self.longueur_gene[id_genes] / vel).astype(int)
 
 
 
 	def elongation(self):
 
-		eqsigma(self.pos_poly, self.promo, self.sens, self.gene_liee_poly, self.longeur, self.sigma, self.vitesse_poly)
-		self.pos_poly += np.take(self.sens,self.gene_liee_poly)*self.vitesse_poly
+		eqsigma(self.pos_poly, self.promo, self.sens, self.gene_liee_poly, self.longueur, self.sigma, vel)
+
+		
+		self.pos_poly += np.round(self.sens[self.gene_liee_poly]*vel).astype(int)
 
 
 	def simulation(self,sigma): 

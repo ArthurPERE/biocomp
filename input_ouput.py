@@ -1,7 +1,8 @@
-import polymerase as poly
 import gene
 import chromosome as chro
 import numpy as np
+
+from donnee import *
 
 
 
@@ -23,13 +24,13 @@ def input_sim(chemin_gene_pos, chemin_gene_taux):
 		l = line.split()
 		if l[2] == "region":
 
-			longeur = int(l[4]) - (int(l[3]) - 1)
+			longueur = int(l[4]) - (int(l[3]) - 1)
 
 			nom = l[-1].split(";")[1].split("=")[1]
 			id_C = l[-1].split(";")[0].split("=")[1]
 
-			chromo = chro.chromosome(longeur, nom, id_C)
-			del(longeur)
+			chromo = chro.chromosome(longueur, nom, id_C)
+			del(longueur)
 			del(nom)
 			del(id_C)
 
