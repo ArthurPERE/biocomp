@@ -47,7 +47,7 @@ time = np.array([0 for i in xrange(nb_poly)])
 
 for t in xrange(1000):
 	# vecteur temps de fixation de la polymerase
-	print t
+	print(t)
 
 	poly_des = np.where(time <= 0)[0]
 
@@ -56,7 +56,7 @@ for t in xrange(1000):
 
 
 
-	
+	chromo.elongation()
 
 	time -= 1
 
@@ -72,7 +72,7 @@ for t in xrange(1000):
 
 
 
-print len(chromo.sigma)
+print(len(chromo.sigma))
 
 
 file_gene.close()

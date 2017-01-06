@@ -2,6 +2,7 @@ import gene as g
 import numpy as np
 import polymerase
 from math import *
+from eqsygma import *
 
 class chromosome:
 	# longeur du genome
@@ -73,8 +74,10 @@ class chromosome:
 
 
 
+	def elongation(self):
 
-
+		eqsigma(self.pos_poly, self.promo, self.sens, self.gene_liee_poly, self.longeur, self.sigma, self.vitesse_poly)
+		self.pos_poly += np.take(self.sens,self.gene_liee_poly)*self.vitesse_poly
 
 
 	def simulation(self,sigma): 
