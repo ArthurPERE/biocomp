@@ -14,28 +14,6 @@ class Polymerase:
 
 		self.genes = 0
 
-	
-
-	# prob_genes = listes de toutes les probabilite initiation pour chaque genes
-	# genes = listes de tous les genes
-	def initiation(self, prob_genes, genes):
-
-		l = len(genes)
-		gene1 = rd.sample(range(l), l)
-
-		for gene in gene1:
-
-			
-			# si la polymerase est accepte
-			if rand() < prob_genes[gene] :
-
-				self.fixee = True
-
-				self.x = genes[gene].debut
-
-				return True
-
-		return False
 
 
 for i in xrange(20):
@@ -50,4 +28,5 @@ b = np.where(a == 0)[0]
 
 
 print a 
-print b'''
+print b
+'''

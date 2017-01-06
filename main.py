@@ -3,87 +3,77 @@ import polymerase as poly
 import gene
 import chromosome as chro
 import numpy as np
+import os
+
+from input_ouput import *
 
 # nombre de polymerases
 nb_poly = 2
 
-# vecteur de gene
-genes = []
+
+chromo, genes = input_sim("../examples/chrom3genes.gff", "../examples/chrom3genes_rates.dat")
 
 
-# extraire les informations des genes pour leur position dans le genome
-file = open("../examples/chrom3genes.gff","r")
-lines = file.readlines()
 
-for line in lines:
-	
-	# ignorer les commantaires
-	if line[0] == "#":
-		continue
 
-	l = line.split()
-	if l[2] == "region":
 
-		longeur = int(l[4]) - (int(l[3]) - 1)
+file_gene = open("../result/gene.txt", 'w')
+file_sigma = open("../result/sigma.txt", "w")
 
-		nom = l[-1].split(";")[1].split("=")[1]
-		id_C = l[-1].split(";")[0].split("=")[1]
+file_gene.write("t\t")
 
-		chromo = chro.chromosome(longeur, nom, id_C)
-		del(longeur)
-		del(nom)
-		del(id_C)
+for i in xrange(len(genes)-1):
+	file_gene.write("%s\t"% genes[i].nom)
 
-	else :
 
-		nom_gene = l[-1].split(";")[1].split("=")[1]
-		id_gene = l[-1].split(";")[0].split("=")[1]
+file_gene.write("%s\n"% genes[len(genes)-1].nom)
 
-		if str(l[6]) == "+":
-			genes.append(gene.gene(nom_gene, id_gene, l[3], l[4]))
 
-		else :
-			genes.append(gene.gene(nom_gene, id_gene, l[4], l[3]))
 
-file.close()
 
-# extraire les informations des genes pour leurs taux d'initition et de terminaison
-file = open("../examples/chrom3genes_rates.dat")
-lines = file.readlines()
-for line in lines:
-	# ignorer les commantaires
-	if line[0] == "#":
-		continue
-	
-	l = line.split()
-	for i in genes :
-
-		if i.id == l[1]:
-			i.init = float(l[2])
-			i.term = float(l[3])
-
-file.close()
-del(lines)
-del(line)
 
 
 
 chromo.genes = np.array(genes)
-chromo.polymerases = np.array([poly.Polymerase() for i in xrange(nb_poly)])
 
-chromo.create_vector()
-
-
-print chromo.calcK()
+genes_transcrit = np.zeros(len(genes))
 
 
+chromo.create_vector(nb_poly)
 
-# vecteur temps de fixation de la polymerase
+
+a = range(10);
 time = np.array([0 for i in xrange(nb_poly)])
 
-# vecteur polymerase
-polym = np.array([poly.Polymerase() for i in xrange(nb_poly)])
+for t in xrange(1000):
+	# vecteur temps de fixation de la polymerase
+	print t
+
+	poly_des = np.where(time <= 0)[0]
+
+	if len(poly_des) != 0:
+		time[ poly_des ] = chromo.initialisation(poly_des)
 
 
 
-chromo.initialisation(np.where(time <= 0), time)
+	
+
+	time -= 1
+
+	poly_term = np.where(time == 0)[0]
+
+
+	genes_transcrit[ chromo.gene_liee_poly[ poly_term ] ]  += 1
+
+
+
+
+	output_sim(file_gene, file_sigma, time, genes_transcrit, chromo.sigma, t)
+
+
+
+print len(chromo.sigma)
+
+
+file_gene.close()
+file_sigma.close()

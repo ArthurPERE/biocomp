@@ -1,58 +1,69 @@
-''' inputs 
-TabPosition : Position de la Polymerase. Taille N
-TabDirection : Direction de traduction. Taille N
-ActiveGen : Gens en traduction par la polymerase. Taille N
-TabGen : data sur les gens . Taille 2*n (Fille --> Gen id. Colonne --> [0] Promoteur position, [1] Longeur Gen.)
-CantBases : Quantite de bases
-vel : velocité d'elongation
-
+import numpy as np
+ 
+''' inputs
+sigma : sigma(x) a t
+TabPol : data sur les polymerases. Taille N*3 (File --> Pol id. Colonne --> [0] Position pol. [1] Direction de trad, [2] ActiveGen
+TabGen : data sur les gens . Taille n*2 (Fille --> Gen id. Colonne --> [0] Promoteur position, [1] Longeur Gen.)
+CantBases : Quantite de bases (total dans l'ADN)
+vel : velocite d'elongation
+ 
 Outputs
 Vecteur: sigma'''
-
+ 
 '''Taille N --> Cant. de polymerases
 Taille n --> Cant de Genes '''
+ 
+# sigma = sigma0
+t = 0
+l = 10
+vel = 25
+ 
+# J0 c'est un parametre, je prendre ce valeur la pour J=v*lamda et J=J0[1+lamda]/(2*l) simplifie
+J0 = 2 * l * vel
+ 
+# D est un parametre, je prendre ce valeur la pour la bibliographie (aussi 2,55*10**3) unites : bp**2/s
+D = 10 ** 5
+ 
+# AxeX = CantBases / l
+ 
+def eqsigma(TabGen, TabPol, AxeX, sigma, vel):
+ 
+	dt = 1 / vel
+	sigmavec = np.zeros(AxeX)
+    
+	PosProm = TabGen[:][0]
+    # LongGen = TabGen[:][1]
+	PosPol = TabPol[:][0]
+	DirPol = TabPol[:][1]
+	ActiveGen = TabPol[:][2]
+ 
+	ti = (PosPol - np.take(PosProm, ActiveGen))
+	
+	a = J0 * ( ti * (1/l) + 1) # Equation d'origine a = ti * vel * J0 * (1/l) + J0, avec ti = (PosPol - np.take(PosProm, ActiveGen)) / vel
+	
+	Jp = np.multiply(DirPol, a)
+	print Jp
+	np.put(sigmavec, PosPol, Jp, mode="raise")
+	
+	
+	DerJp = (np.roll(sigmavec, -1) - np.roll(sigmavec, 1)) / (2 * l)
+	sigmadx = (np.roll(sigma, -1) - np.roll(sigma, 1)) / (2 * l)
+	sigmadx2 = (np.roll(sigmadx, -1) - np.roll(sigmadx, 1)) / (2 * l)
+	
+	
+	sigmadt = D * sigmadx2 - DerJp
+	sigma = sigma + sigmadt * dt
+	
+	
+	return sigma
+ 
+# Test
+ 
+TabGen = [[0,1000,2000,3000,4000,5000,6000,7000],[500,600,700,200,300,400,800,1000]]
+TabPol = [[1200, 3050, 5100, 7005],[-1,1,1,-1],[1,3,5,7]]
+AxeX = 10000
+sigma = np.random.randint(10, size=AxeX)
+vel = np.random.randint(20, 25, size = AxeX)
+print(eqsigma(TabGen,TabPol,AxeX,sigma, vel))
 
-def eqsygma(TabPosition, TabDirection, TabGen, CantBases, vel):
-
-    sygmavec = [0]*CantBases
-    t = [0] * N
-    # J0 = [0]*N
-    Jp = [0] * N
-    derJp = [0] * N
-
-    N = len(TabPosition)
-    l = 10
-    D = 10**5
-    # J = 2.55*D
-
-
-    for i in range(N):
-
-        a = ActiveGen[i]
-        LongGen = TabGen[a][1]
-        Promot = TabGen[a][0]
-        s = TabDirection[i]
-        Pos = TabPosition[i]
-
-       # J0[i] = J/(1+LongGen/(2*l))
-        t[i] = (TabPosition[i] - Promot)/vel
-       # Jp[i]=s*(J0[i]+J0[i]*vel*t[i]/l)
-
-       # J0 = 2*l*vel
-        J0 = vel/((1/LongGen)+1/(2*l))
-        Jp[i] = s*(J0+J0*vel*t[i]/l)
-
-        '''Plusiers questions: (voir paper Brackley)
-        Valeur J0? Dependant du Lambda (LongGen?), variable ou pas?
-        Delta x = l0, represents quoi? '''
-
-    for h in range(1,N-1):
-        derJp[h] = (Jp[h+1]-Jp[h-1])/(2*l)
-
-    # Cette equation calcule la derivee dans un point. Cas h=0 o h=N-1 ? (ou il y a pas de h-1 ou h+1)
-
-    # Partial Differential Equation
-    # initial values --> sigma(0,x) = 0 , sigma(t,0) = sigma (t, CantBases) ?
-
-    # return sygmavec
-
+#Apparement ca marche bien :D 

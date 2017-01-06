@@ -12,20 +12,28 @@ class chromosome:
 
 		# le tableau de genes
 		self.genes = []
-		self.polymerases = []
 
-		self.sigma = np.array([-0.4 for i in xrange(longeur)])
+		self.sigma = -0.4 * np.ones(longeur)
 
 		
 	# fonction pour creer les vecteurs contenant les positions des promoteurs
 	# et du taux initalisation
-	def create_vector(self):
-		self.promo = []
-		self.taux_init = []
+	def create_vector(self, nb_poly):
 
-		for i in self.genes:
-			self.promo.append(i.position_deb)
-			self.taux_init.append(i.init)
+
+		self.id_genes = np.array(xrange(len(self.genes))).astype(int)
+		self.promo = np.array([ i.position_deb for i in self.genes ]).astype(int)
+		self.taux_init = np.array([ i.init for i in self.genes ])
+		self.taux_term = np.array([ i.term for i in self.genes ])
+		self.longeur = np.array([ i.longeur for i in self.genes ]).astype(int)
+		self.sens = np.array([ i.sens for i in self.genes ]).astype(int)
+
+		self.pos_poly = - np.ones(nb_poly).astype(int)
+		self.vitesse_poly = np.random.randint(25,50, size = nb_poly)
+		self.gene_liee_poly = - np.ones(nb_poly).astype(int)
+
+
+
 
 
 	## le f(sigma) dans l'equation de taux d'init
@@ -49,21 +57,23 @@ class chromosome:
 
 
 	# fonction initialisation
-	# indice_t : indices negatif de t
+	# indice_t : indices negatif ou nul de t
 	def initialisation(self, indice_t):
 
+		# calcul du vecteur K qui est la probabilite de choisir un gene en particulier
 		K = self.calcK()
 
-		t = [0 for i in xrange(len(indice_t))]
-		# gene : parmie les elements des genes, on choisit le nombre de polymerases inactive
-		# avec differentes probabilite
-		genes = np.random.choice(self.genes, len(indice_t), replace=False, p=K)
+		# id : parmie les genes, on choisit les promoteur qui seront le plus a meme de recevoir les polymerases
+		id_genes = np.random.choice(self.id_genes, min(len(indice_t), len(self.promo)), replace=False, p=K)
 
+		self.pos_poly[indice_t] = self.promo[id_genes]
+		self.gene_liee_poly[indice_t] = id_genes
 		
+		return self.longeur[id_genes] * self.vitesse_poly[indice_t] / 1000
 
 
-	# 
-	def update_initial(self, indice_t, P_inac, genes):
+
+
 
 
 
