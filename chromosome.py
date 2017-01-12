@@ -71,7 +71,7 @@ class chromosome:
 		self.gene_liee_poly[indice_t] = id_genes
 
 		
-		return (self.longueur_gene[id_genes] / (vel) - 1).astype(int)
+		return ((self.longueur_gene[id_genes] / (vel) - 1) + np.random.poisson(self.taux_term[id_genes], len(indice_t)) ).astype(int)
 
 
 
