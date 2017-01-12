@@ -55,9 +55,9 @@ time = np.array([0 for i in xrange(nb_poly)])
 
 
 
-for t in xrange(temps_simul):
+for t in frange(0, temps_simul, step):
 	# vecteur temps de fixation de la polymerase
-	print t
+	print t, temps_simul
 
 	poly_des = np.where(time <= 0)[0]
 
@@ -72,8 +72,6 @@ for t in xrange(temps_simul):
 	poly_term = np.where(time == 0)[0]
 
 	genes_transcrit[ chromo.gene_liee_poly[ poly_term ] ]  += 1
-
-
 
 
 	output_sim(file_gene, file_sigma, time, genes_transcrit, chromo.sigma, t)

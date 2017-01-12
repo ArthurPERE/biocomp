@@ -18,9 +18,3 @@ class gene:
 		self.init = 1
 		self.term = 1
 
-		self.transcript = 0
-
-
-	def __repr__(self) :
-		return "id = %s, longeur = %d, transcript = %d"%(self.id, self.longueur, self.transcript)
-

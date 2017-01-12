@@ -8,14 +8,14 @@ from donnee import *
 class chromosome:
 	# longeur du genome
 	def __init__(self, longueur, nom, id_c):
-		self.longueur = longueur
+		self.longueur = int(longueur / l)
 		self.nom = nom
 		self.id = id_c
 
 		# le tableau de genes
 		self.genes = []
 
-		self.sigma = -0.4 * np.ones(longueur)
+		self.sigma = -0.4 * np.ones(self.longueur)
 
 		
 	# fonction pour creer les vecteurs contenant les positions des promoteurs
@@ -65,13 +65,13 @@ class chromosome:
 		K = self.calcK()
 
 		# id : parmie les genes, on choisit les promoteur qui seront le plus a meme de recevoir les polymerases
-		id_genes = np.random.choice(self.id_genes, min(len(indice_t), len(self.promo)), replace=False, p=K)
+		id_genes = np.random.choice(self.id_genes, len(indice_t), replace=False, p=K)
 
 		self.pos_poly[indice_t] = self.promo[id_genes]
 		self.gene_liee_poly[indice_t] = id_genes
 
 		
-		return (self.longueur_gene[id_genes] / vel).astype(int)
+		return (self.longueur_gene[id_genes] / (vel) - 1).astype(int)
 
 
 

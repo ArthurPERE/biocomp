@@ -29,7 +29,7 @@ def eqsigma(PosPol, PosProm, DirGen, ActiveGen, CantBases, sigma, vel):
 	Jp = np.multiply(DirPol, a)
 
 	np.put(sigmavec, PosPol, Jp, mode="raise")
-		
+
 	DerJp = (np.roll(sigmavec, -1) - np.roll(sigmavec, 1)) / (2 * l)
 	sigmadx = (np.roll(sigma, -1) - np.roll(sigma, 1)) / (2 * l)
 	sigmadx2 = (np.roll(sigmadx, -1) - np.roll(sigmadx, 1)) / (2 * l)
